@@ -12,6 +12,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ViewPagerWithCircle viewPager = (ViewPagerWithCircle) findViewById(R.id.viewPager);
-        viewPager.setAdapter(new MyFragmentAdapter(getSupportFragmentManager()));
+        MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager());
+        viewPager.setCanRepeatScroll(adapter.getActuallyCount());
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(100);
     }
 }

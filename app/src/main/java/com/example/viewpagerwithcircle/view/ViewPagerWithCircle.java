@@ -24,6 +24,8 @@ public class ViewPagerWithCircle extends ViewPager {
     private int mItemDistance           = 8;                // 两个圆之间的距离
     private Paint mCirclePaint;                             // 画圆的画笔
     private int mLeftOrRightMargin      = 20;               // 如果是左对齐模式或者右对齐模式, 设置一个距离边界的距离
+    private boolean isRepeatScroll = false;                 // 设置是否支持连续滑动
+    private int mActuallyCount;                             // 存储实际上的count值
 
 
     public ViewPagerWithCircle(@NonNull Context context) {
@@ -67,7 +69,7 @@ public class ViewPagerWithCircle extends ViewPager {
             x = mLeftOrRightMargin;
         }
 
-        int selected = getCurrentItem();
+        int selected = getSelectedItem();
         int dx = x;
         for (int i = 0; i < count; i++) {
             if (selected == i) {
@@ -83,11 +85,23 @@ public class ViewPagerWithCircle extends ViewPager {
     }
 
 
-    public int getCount() {
-        if (getAdapter() != null) {
-            return getAdapter().getCount();
+    private int getCount() {
+        if (isRepeatScroll) {
+            return mActuallyCount;
+        } else {
+            if (getAdapter() != null) {
+                return getAdapter().getCount();
+            }
+            return 0;
         }
-        return 0;
+    }
+
+    private int getSelectedItem() {
+        int index = getCurrentItem();
+        if (isRepeatScroll) {
+            return index % mActuallyCount;
+        }
+        return index;
     }
 
     private int dip2px(float dip) {
@@ -98,6 +112,15 @@ public class ViewPagerWithCircle extends ViewPager {
 
     public void setMode(int mode) {
         this.mMode = mode;
+    }
+
+    public void cancelRepeatScroll() {
+        this.isRepeatScroll = false;
+    }
+
+    public void setCanRepeatScroll(int actuallyCount) {
+        this.isRepeatScroll = true;
+        this.mActuallyCount = actuallyCount;
     }
 
     public void setSelectedColor(int selectedColor) {

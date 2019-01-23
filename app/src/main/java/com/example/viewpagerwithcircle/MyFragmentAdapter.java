@@ -15,18 +15,22 @@ public class MyFragmentAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int i) {
         CommonFragment fragment = new CommonFragment();
-        fragment.setText(mTitle[i]);
+        fragment.setText(mTitle[i % mTitle.length]);
         return fragment;
     }
 
     @Override
     public int getCount() {
-        return mTitle.length;
+        return Integer.MAX_VALUE;
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return mTitle[position];
+        return mTitle[position % mTitle.length];
+    }
+
+    public int getActuallyCount() {
+        return mTitle.length;
     }
 }
